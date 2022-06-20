@@ -16,7 +16,7 @@ const password = 'Brutus89+';
 (async () => {
 
 
-    const browser = await pup.launch({headless: false})
+    const browser = await pup.launch({headless: true})
     const page = await browser.newPage();
 
     await page.goto(url);
@@ -36,7 +36,7 @@ const password = 'Brutus89+';
 
     )
 
-    await page.evaluate(() => alert('This message is inside an alert box'));
+    // await page.evaluate(() => alert('This message is inside an alert box'));
 
     const idReq = await page.evaluate(async (target,searchParam) => {
       let doc;  
@@ -75,7 +75,7 @@ const password = 'Brutus89+';
 
       const Req = await page.evaluate(async (idReq) => {
         let doc;  
-        alert('id='+idReq+'&acao=200');
+        // alert('id='+idReq+'&acao=200');
         const response = await fetch('https://sipac.ufrn.br/sipac/acompanharReqMaterial.do', {
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
               mode: 'cors', // no-cors, *cors, same-origin
@@ -135,11 +135,8 @@ const password = 'Brutus89+';
   
         },idReq);
 
-        console.log(Req);
+        console.log(Req); //mostrando a requisição
 
-        //motrando a requisição
-
-    await page.waitForTimeout(3000);
 
     await browser.close();
 
