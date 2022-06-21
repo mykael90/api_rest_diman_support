@@ -1,6 +1,8 @@
 import pup from 'puppeteer';
 
 const pupReqMaterial = async (codReq) => {
+  if (isNaN(codReq)) return;
+
   const target = 'https://sipac.ufrn.br/sipac/buscaListaReq.do';
 
   const numeroReq = codReq.slice(0, -4);
@@ -31,8 +33,6 @@ const pupReqMaterial = async (codReq) => {
 
   );
 
-  // await page.evaluate(() => alert('This message is inside an alert box'));
-
   const idReq = await page.evaluate(async (target, searchParam) => {
     let doc;
     const response = await fetch(target, {
@@ -56,14 +56,18 @@ const pupReqMaterial = async (codReq) => {
     doc = parser.parseFromString(textBuffer, 'text/html');
 
     // EXTRAINDO AS INFORMACOES DA REQUISICAO (PODE UNIFICAR EM UMA UNICA LINHA)
-    const tableDados = doc.querySelector('tbody');
-    // if (tableDados.children.lenght != 1) return null;
+    const tableDados = doc.querySelector('tbody.listagem');
+    if (!tableDados) return;
     return tableDados.childNodes[1].children[11].children[0].value;
   }, target, searchParam);
 
+  if (!idReq) {
+    await browser.close();
+    return;
+  }
+
   const Req = await page.evaluate(async (idReq) => {
     let doc;
-    // alert('id='+idReq+'&acao=200');
     const response = await fetch('https://sipac.ufrn.br/sipac/acompanharReqMaterial.do', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
