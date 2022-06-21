@@ -1,22 +1,20 @@
-const pup = require('puppeteer');
+import pup from 'puppeteer';
 
-const url = 'https://autenticacao.ufrn.br/sso-server/login?service=https%3A%2F%2Fsipac.ufrn.br%2Fsipac%2Flogin%2Fcas';
+const pupReqMaterial = async (codReq) => {
+  const target = 'https://sipac.ufrn.br/sipac/buscaListaReq.do';
 
-const target = 'https://sipac.ufrn.br/sipac/buscaListaReq.do';
+  const numeroReq = codReq.slice(0, -4);
+  const anoReq = codReq.slice(-4);
 
-const numeroReq = 13226;
-const anoReq = 2022;
+  const searchParam = `tipoReq.id=1&buscaNumAno=true&numero=${numeroReq}&ano=${anoReq}`; // ESPECIFICAR O NUMERO E ANO DA REQUISIÇÃO. (REQ MATERIAL)
 
-const searchParam = `tipoReq.id=1&buscaNumAno=true&numero=${numeroReq}&ano=${anoReq}`; // ESPECIFICAR O NUMERO E ANO DA REQUISIÇÃO. (REQ MATERIAL)
+  const username = process.env.USERNAMESIPAC;
+  const password = process.env.PASSWORDSIPAC;
 
-const username = 'mykael.mello';
-const password = 'Brutus89+';
-
-(async () => {
   const browser = await pup.launch({ headless: true });
   const page = await browser.newPage();
 
-  await page.goto(url);
+  await page.goto('https://autenticacao.ufrn.br/sso-server/login?service=https%3A%2F%2Fsipac.ufrn.br%2Fsipac%2Flogin%2Fcas');
 
   await page.waitForSelector('#username');
   await page.waitForSelector('#password');
@@ -63,8 +61,6 @@ const password = 'Brutus89+';
     return tableDados.childNodes[1].children[11].children[0].value;
   }, target, searchParam);
 
-  console.log(idReq); // mostrando o ID do sipac
-
   const Req = await page.evaluate(async (idReq) => {
     let doc;
     // alert('id='+idReq+'&acao=200');
@@ -90,7 +86,7 @@ const password = 'Brutus89+';
 
     // EXTRAINDO AS INFORMACOES DA REQUISICAO (PODE UNIFICAR EM UMA UNICA LINHA)
     const tableDados = Array.from(doc.querySelector('table.formulario tbody').children);
-    const dados = tableDados.map((e) => e.innerText.replace(/[\n\t\r]/g, '').split(':'));
+    const dados = tableDados.map((e) => e.innerText.replace(/[\n\t\r]/g, '').trim().split(':'));
     dados.splice(-3, 3); // REMOVER ULTIMAS 3 LINHAS DESNECESSARIAS
 
     // TABLE TO JSON (dados)
@@ -107,24 +103,23 @@ const password = 'Brutus89+';
     const tableItens = Array.from(doc.querySelector('table.formulario table tbody').children);
     const itens = tableItens.map((e) => Array.from(Array.from(e.children).map((i) => i.innerText.replace(/[\n\t\r]/g, '').trim())));
 
-    // CONCATENANDO TITULO E ITENS VIA DESESTRUTURACAO
-    const info = [[...campos], ...itens];
-
     // TABLE TO JSON (itens)
     const itensJSON = [];
 
     for (let c = 0; c < itens.length; c++) {
       const itemJSON = {};
-      for (let i = 0; i < 13; i++) {
+      for (let i = 0; i < 11; i++) {
         itemJSON[campos[i]] = itens[c][i];
       }
       itensJSON.push(itemJSON);
     }
 
-    return [dadosJSON, itensJSON];
+    return { dadosJSON, itensJSON };
   }, idReq);
 
-  console.log(Req); // mostrando a requisição
-
   await browser.close();
-})();
+
+  return (Req);
+};
+
+export default pupReqMaterial;

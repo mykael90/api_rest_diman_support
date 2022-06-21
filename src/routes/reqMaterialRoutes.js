@@ -3,6 +3,6 @@ import reqMaterialController from '../controllers/ReqMaterialController';
 
 const router = new Router();
 
-router.post('/', reqMaterialController.store);
+router.get('/:reqmat', reqMaterialController.index);
 
 export default router;

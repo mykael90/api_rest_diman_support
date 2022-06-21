@@ -1,9 +1,12 @@
+import pupReqMaterial from '../puppeteer/reqMaterial';
+
 class ReqMaterialController {
-  // Store
-  async store(req, res) {
+  // GET
+  async index(req, res) {
     try {
-      const data = req.body;
-      return res.json(data.name);
+      const reqMat = await pupReqMaterial(req.params.reqmat);
+      console.log(reqMat);
+      return res.json(reqMat);
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),
