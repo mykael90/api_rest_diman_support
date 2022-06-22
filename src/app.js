@@ -13,6 +13,7 @@ dotenv.config();
 const whiteList = [
   'https://react.mme.eng.br',
   'http://localhost:3001',
+  'http://localhost:3000',
   'https://www.wikipedia.org', // teste
 ];
 
