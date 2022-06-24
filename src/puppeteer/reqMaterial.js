@@ -13,7 +13,16 @@ const pupReqMaterial = async (codReq) => {
   const username = process.env.USERNAMESIPAC;
   const password = process.env.PASSWORDSIPAC;
 
-  const browser = await pup.launch({ headless: true });
+  const browser = await pup.launch({
+    headless: true,
+    devtools: true,
+    args: [
+      '--disable-web-security',
+      '--disable-features=IsolateOrigins',
+      '--disable-site-isolation-trials',
+    ],
+  });
+
   const page = await browser.newPage();
 
   await page.goto('https://autenticacao.ufrn.br/sso-server/login?service=https%3A%2F%2Fsipac.ufrn.br%2Fsipac%2Flogin%2Fcas');
