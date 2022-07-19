@@ -2,15 +2,21 @@
 
 import pup from 'puppeteer';
 
-const pupReqMaterial = async (codReq) => {
-  if (isNaN(codReq)) return;
+const pupMultReqMaterial = async (codReq) => {
+  if (codReq.constructor !== Array) return;
 
   const target = 'https://sipac.ufrn.br/sipac/buscaListaReq.do';
 
-  const numeroReq = codReq.slice(0, -4);
-  const anoReq = codReq.slice(-4);
+  const numeroReq = [];
+  const anoReq = [];
+  const searchParams = [];
 
-  const searchParam = `tipoReq.id=1&buscaNumAno=true&numero=${numeroReq}&ano=${anoReq}`; // ESPECIFICAR O NUMERO E ANO DA REQUISIÇÃO. (REQ MATERIAL)
+  // eslint-disable-next-line no-restricted-syntax, guard-for-in
+  for (const i in codReq) {
+    numeroReq.push(codReq[i].slice(0, -4));
+    anoReq.push(codReq[i].slice(-4));
+    searchParams.push(`tipoReq.id=1&buscaNumAno=true&numero=${numeroReq[i]}&ano=${anoReq[i]}`);
+  }
 
   const username = process.env.USERNAMESIPAC;
   const password = process.env.PASSWORDSIPAC;
@@ -44,7 +50,8 @@ const pupReqMaterial = async (codReq) => {
 
   );
 
-  const idReq = await page.evaluate(async (target, searchParam) => {
+  // eslint-disable-next-line max-len
+  const idReqs = await page.evaluate(async (target, searchParams) => Promise.all(searchParams.map(async (searchParam) => {
     let doc;
     const response = await fetch(target, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -70,14 +77,10 @@ const pupReqMaterial = async (codReq) => {
     const tableDados = doc.querySelector('tbody.listagem');
     if (!tableDados) return;
     return tableDados.childNodes[1].children[11].children[0].value;
-  }, target, searchParam);
+  })), target, searchParams);
 
-  if (!idReq) {
-    await browser.close();
-    return;
-  }
-
-  const Req = await page.evaluate(async (idReq) => {
+  const Reqs = await page.evaluate(async (idReqs) => Promise.all(idReqs.map(async (idReq) => {
+    if (!idReq) return;
     let doc;
     const response = await fetch('https://sipac.ufrn.br/sipac/acompanharReqMaterial.do', {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -130,11 +133,11 @@ const pupReqMaterial = async (codReq) => {
     }
 
     return { dadosJSON, itensJSON };
-  }, idReq);
+  })), idReqs);
 
   await browser.close();
 
-  return (Req);
+  return (Reqs);
 };
 
-export default pupReqMaterial;
+export default pupMultReqMaterial;
