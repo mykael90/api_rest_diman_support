@@ -13,8 +13,8 @@ const pupMultReqMaterial = async (codReq) => {
 
   // eslint-disable-next-line no-restricted-syntax, guard-for-in
   for (const i in codReq) {
-    numeroReq.push(codReq[i].slice(0, -4));
-    anoReq.push(codReq[i].slice(-4));
+    numeroReq.push(codReq[i].split('/')[0]);
+    anoReq.push(codReq[i].split('/')[1]);
     searchParams.push(`tipoReq.id=1&buscaNumAno=true&numero=${numeroReq[i]}&ano=${anoReq[i]}`);
   }
 
