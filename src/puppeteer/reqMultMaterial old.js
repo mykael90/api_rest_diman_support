@@ -7,6 +7,17 @@ const pupMultReqMaterial = async (codReq) => {
 
   const target = 'https://sipac.ufrn.br/sipac/buscaListaReq.do';
 
+  const numeroReq = [];
+  const anoReq = [];
+  const searchParams = [];
+
+  // eslint-disable-next-line no-restricted-syntax, guard-for-in
+  for (const i in codReq) {
+    numeroReq.push(codReq[i].split('/')[0]);
+    anoReq.push(codReq[i].split('/')[1]);
+    searchParams.push(`tipoReq.id=1&buscaNumAno=true&numero=${numeroReq[i]}&ano=${anoReq[i]}`);
+  }
+
   const username = process.env.USERNAMESIPAC;
   const password = process.env.PASSWORDSIPAC;
 
@@ -40,11 +51,7 @@ const pupMultReqMaterial = async (codReq) => {
   );
 
   // eslint-disable-next-line max-len
-  const idReqs = await page.evaluate(async (target, codReq) => Promise.all(codReq.map(async (value) => {
-    const numeroReq = value.split('/')[0];
-    const anoReq = value.split('/')[1];
-    const searchParam = `tipoReq.id=1&buscaNumAno=true&numero=${numeroReq}&ano=${anoReq}`;
-
+  const idReqs = await page.evaluate(async (target, searchParams) => Promise.all(searchParams.map(async (searchParam) => {
     let doc;
     const response = await fetch(target, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -69,12 +76,12 @@ const pupMultReqMaterial = async (codReq) => {
     // EXTRAINDO AS INFORMACOES DA REQUISICAO (PODE UNIFICAR EM UMA UNICA LINHA)
     const tableDados = doc.querySelector('tbody.listagem');
 
-    if (!tableDados) return `Requisição de material nº ${value} não localizada`;
-    if (tableDados.childNodes[1].children[6].innerText.trim() !== 'ALMOXARIFADO DE MATERIAIS DE MANUTENÇÃO DE IMÓVEIS') return `Requisição de material nº ${value} alheia a manutenção`;
-    if (tableDados.childNodes[1].children[7].innerText.trim() !== 'FINALIZADA') return `Requisição de material nº ${value} não finalizada`;
+    if (!tableDados) return `Requisição de material ${12345} não localizada`;
+    if (tableDados.childNodes[1].children[6].innerText.trim() !== 'ALMOXARIFADO DE MATERIAIS DE MANUTENÇÃO DE IMÓVEIS') return `Requisição de material ${12345} alheia a manutenção`;
+    if (tableDados.childNodes[1].children[7].innerText.trim() !== 'FINALIZADA') return `Requisição de material ${12345} não finalizada`;
 
     return tableDados.childNodes[1].children[11].children[0].value;
-  })), target, codReq);
+  })), target, searchParams);
 
   const Reqs = await page.evaluate(async (idReqs) => Promise.all(idReqs.map(async (idReq) => {
     if (!idReq) return idReq; // retorna o string de erro criado no lugar do id
@@ -138,7 +145,7 @@ const pupMultReqMaterial = async (codReq) => {
   const errors = Reqs.filter((req) => (typeof req === 'string'));
   const info = Reqs.filter((req) => (typeof req !== 'string'));
 
-  return ({ info, errors });
+  return ({info, errors});
 };
 
 export default pupMultReqMaterial;
