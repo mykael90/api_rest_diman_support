@@ -52,7 +52,7 @@ const pupMultReqMaterial = async (codReq) => {
 
   // eslint-disable-next-line max-len
   const idReqs = await page.evaluate(async (target, searchParams) => Promise.all(searchParams.map(async (searchParam) => {
-    let doc;
+    const doc;
     const response = await fetch(target, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       mode: 'cors', // no-cors, *cors, same-origin
@@ -145,7 +145,7 @@ const pupMultReqMaterial = async (codReq) => {
   const errors = Reqs.filter((req) => (typeof req === 'string'));
   const info = Reqs.filter((req) => (typeof req !== 'string'));
 
-  return ({info, errors});
+  return ({ info, errors });
 };
 
 export default pupMultReqMaterial;
