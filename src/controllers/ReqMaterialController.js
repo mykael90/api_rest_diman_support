@@ -25,7 +25,7 @@ class ReqMaterialController {
       return res.json(reqMat);
     } catch (e) {
       return res.status(400).json({
-        errors: e.errors.map((err) => err.message),
+        errors: [e.message],
       });
     }
   }
