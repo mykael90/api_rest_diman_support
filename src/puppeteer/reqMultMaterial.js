@@ -104,7 +104,7 @@ const pupMultReqMaterial = async (codReq) => {
       // EXTRAINDO AS INFORMACOES DA REQUISICAO (PODE UNIFICAR EM UMA UNICA LINHA)
       const tableDados = Array.from(doc.querySelector('table.formulario tbody').children);
       const dados = tableDados.map((e) => e.innerText.replace(/[\n\t\r]/g, '').trim().split(':'));
-      dados.splice(-3, 3); // REMOVER ULTIMAS 3 LINHAS DESNECESSARIAS
+      dados.length = 17; // REMOVER LINHAS DESNECESSARIAS
 
       console.log('PROBLEMA ABAIXO');
       // TABLE TO JSON (dados)
@@ -145,8 +145,7 @@ const pupMultReqMaterial = async (codReq) => {
 
     return ({ info, errors });
   } catch (e) {
-    console.log(e);
-    return e;
+    return ({ errors: [e.message] });
   }
 };
 
