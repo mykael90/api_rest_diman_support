@@ -23,18 +23,20 @@ const pupMultReqMaterial = async (codReq) => {
 
     const page = await browser.newPage();
 
-    await page.goto('https://autenticacao.ufrn.br/sso-server/login?service=https%3A%2F%2Fsipac.ufrn.br%2Fsipac%2Flogin%2Fcas');
+    await page.goto('https://autenticacao.ufrn.br/sso-server/login?service=https%3A%2F%2Fsipac.ufrn.br%2Fsipac%2Flogin%2Fcas', {
+      waitUntil: 'networkidle2',
+    });
 
     await page.waitForSelector('#username');
-    await page.waitForSelector('#password');
-
     await page.type('#username', username);
+
+    await page.waitForSelector('#password');
     await page.type('#password', password);
 
     await Promise.all(
       [
         page.waitForNavigation(),
-        await page.click('.btn-login'),
+        page.click('.btn-login'),
 
       ],
 
@@ -46,7 +48,6 @@ const pupMultReqMaterial = async (codReq) => {
       const anoReq = value.split('/')[1];
       const searchParam = `tipoReq.id=1&buscaNumAno=true&numero=${numeroReq}&ano=${anoReq}`;
 
-      let doc;
       const response = await fetch(target, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
@@ -65,14 +66,16 @@ const pupMultReqMaterial = async (codReq) => {
       const textBuffer = await decoder.decode(arrayBuffer);
 
       const parser = new DOMParser();
-      doc = parser.parseFromString(textBuffer, 'text/html');
+      const doc = parser.parseFromString(textBuffer, 'text/html');
 
       // EXTRAINDO AS INFORMACOES DA REQUISICAO (PODE UNIFICAR EM UMA UNICA LINHA)
       const tableDados = doc.querySelector('tbody.listagem');
 
+      console.dir(tableDados);
+
       if (!tableDados) return `Requisição de material nº ${value} não localizada`;
       if (tableDados.childNodes[1].children[6].innerText.trim() !== 'ALMOXARIFADO DE MATERIAIS DE MANUTENÇÃO DE IMÓVEIS') return `Requisição de material nº ${value} alheia a manutenção`;
-      if (tableDados.childNodes[1].children[7].innerText.trim() !== 'FINALIZADA') return `Requisição de material nº ${value} não finalizada`;
+      if (!tableDados.childNodes[1].children[7].innerText.trim().include('FINALIZADA')) return `Requisição de material nº ${value} não finalizada`;
 
       return tableDados.childNodes[1].children[11].children[0].value;
     })), target, codReq);
@@ -80,7 +83,7 @@ const pupMultReqMaterial = async (codReq) => {
     const Reqs = await page.evaluate(async (idReqs) => Promise.all(idReqs.map(async (idReq) => {
       if (!idReq) return idReq; // retorna o string de erro criado no lugar do id
       if (!idReq.match(/^[0-9]+$/)) return idReq; // retorna o string de erro criado no lugar do id
-      let doc;
+
       const response = await fetch('https://sipac.ufrn.br/sipac/acompanharReqMaterial.do', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
@@ -99,7 +102,7 @@ const pupMultReqMaterial = async (codReq) => {
       const textBuffer = await decoder.decode(arrayBuffer);
 
       const parser = new DOMParser();
-      doc = parser.parseFromString(textBuffer, 'text/html');
+      const doc = parser.parseFromString(textBuffer, 'text/html');
 
       // EXTRAINDO AS INFORMACOES DA REQUISICAO (PODE UNIFICAR EM UMA UNICA LINHA)
       const tableDados = Array.from(doc.querySelector('table.formulario tbody').children);
