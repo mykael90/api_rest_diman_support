@@ -42,6 +42,10 @@ const pupMultReqMaterial = async (codReq) => {
 
     );
 
+    await page.goto('https://sipac.ufrn.br/sipac/portal_administrativo/index.jsf', {
+      waitUntil: 'networkidle2',
+    }); // inseri essa nova requisição apenas pq deu um bug no sipac no dia 27/10/22 que impedia o acesso direto, emitia um aviso de acesso bloqueado e era necessario fazer a requisição da url novamente para acessar. Depois que corrigirem o problema essa linha pode ser removida para permitir um retorno mais rápido dos dados.
+
     // eslint-disable-next-line max-len
     const idReqs = await page.evaluate(async (target, codReq) => Promise.all(codReq.map(async (value) => {
       const numeroReq = value.split('/')[0];
