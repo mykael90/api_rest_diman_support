@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import express from 'express';
 import homeRoutes from './routes/homeRoutes';
 import reqMaterialRoutes from './routes/reqMaterialRoutes';
+import reqMaintenanceRoutes from './routes/reqMaintenanceRoutes';
 
 dotenv.config();
 
@@ -15,9 +16,13 @@ const whiteList = [
   'http://localhost:3001',
   'http://localhost:3000',
   'http://192.168.0.25:3000',
+  'http://192.168.0.25:3001',
   'http://10.1.159.210:3000',
   'http://10.1.156.199:3000',
   'http://10.1.158.162:3000',
+  'http://10.1.159.210:3001',
+  'http://10.1.156.199:3001',
+  'http://10.1.158.162:3001',
 ];
 
 const corsOptions = {
@@ -49,6 +54,7 @@ class App {
     // Rotas abertas
     this.app.use('/', homeRoutes);
     this.app.use('/reqmaterial/', reqMaterialRoutes);
+    this.app.use('/reqmaintenance/', reqMaintenanceRoutes);
     // this.app.use('/users/', userOpenedRoutes);
 
     // Middleware de autenticação
