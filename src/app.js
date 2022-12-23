@@ -15,6 +15,8 @@ const whiteList = [
   'https://react.mme.eng.br',
   'http://localhost:3001',
   'http://localhost:3000',
+  'http://192.168.0.25',
+  'https://192.168.0.25',
   'http://192.168.0.25:3000',
   'http://192.168.0.25:3001',
   'http://10.1.159.210:3000',
