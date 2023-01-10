@@ -27,6 +27,7 @@ const whiteList = [
   'http://10.1.158.162:3001',
   'https://10.1.156.199',
   'https://10.1.158.162',
+  'https://10.3.225.16',
 ];
 
 const corsOptions = {
