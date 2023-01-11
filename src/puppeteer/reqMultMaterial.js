@@ -18,6 +18,8 @@ const pupMultReqMaterial = async (codReq) => {
         '--disable-web-security',
         '--disable-features=IsolateOrigins',
         '--disable-site-isolation-trials',
+        '--no-sandbox',
+        '--disabled-setupid-sandbox',
       ],
     });
 
