@@ -11,7 +11,9 @@ const pupMultReqMaterial = async (codReq) => {
     const username = process.env.USERNAMESIPAC;
     const password = process.env.PASSWORDSIPAC;
 
-    const browser = await pup.launch({
+    const isLinux = process.env?.LINUX_ENVIRONMENT ?? false;
+
+    const objPup = {
       headless: true,
       devtools: true,
       args: [
@@ -21,7 +23,11 @@ const pupMultReqMaterial = async (codReq) => {
         '--no-sandbox',
         '--disabled-setupid-sandbox',
       ],
-    });
+    };
+
+    if (isLinux) objPup.executablePath = '/usr/bin/chromium-browser';
+
+    const browser = await pup.launch(objPup);
 
     const page = await browser.newPage();
 
