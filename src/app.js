@@ -19,15 +19,16 @@ const whiteList = [
   'https://192.168.0.25',
   'http://192.168.0.25:3000',
   'http://192.168.0.25:3001',
-  'http://10.1.159.210:3000',
   'http://10.1.156.199:3000',
   'http://10.1.158.162:3000',
-  'http://10.1.159.210:3001',
   'http://10.1.156.199:3001',
   'http://10.1.158.162:3001',
   'https://10.1.156.199',
   'https://10.1.158.162',
-  'https://10.3.225.16',
+  'https://sisman.infra.ufrn.br',
+  'https://sisman.infra.ufrn.br:3000',
+  'https://sisman.infra.ufrn.br:3002',
+
 ];
 
 const corsOptions = {
