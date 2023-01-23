@@ -27,6 +27,7 @@ const whiteList = [
   'https://10.1.158.162',
   'https://sisman.infra.ufrn.br',
   'https://sisman.infra.ufrn.br:3000',
+  'https://sisman.infra.ufrn.br:3001',
   'https://sisman.infra.ufrn.br:3002',
 
 ];
