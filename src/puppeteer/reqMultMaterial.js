@@ -11,7 +11,7 @@ const pupMultReqMaterial = async (codReq) => {
     const username = process.env.USERNAMESIPAC;
     const password = process.env.PASSWORDSIPAC;
 
-    const isLinux = process.env?.LINUX_ENVIRONMENT ?? false;
+    const OSenvironment = process.env.OS_ENVIRONMENT;
 
     const objPup = {
       headless: true,
@@ -25,7 +25,7 @@ const pupMultReqMaterial = async (codReq) => {
       ],
     };
 
-    if (isLinux) objPup.executablePath = '/usr/bin/chromium-browser';
+    if (OSenvironment === 'linux') objPup.executablePath = '/usr/bin/chromium-browser';
 
     const browser = await pup.launch(objPup);
 
