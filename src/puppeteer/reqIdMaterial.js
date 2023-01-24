@@ -13,8 +13,24 @@ const searchParam = `form=form&form%3AbuscaCodigo=on&form%3AcodigoMaterial=${cod
 const username = 'mykael.mello';
 const password = 'Brutus89+';
 
+const OSenvironment = process.env.OS_ENVIRONMENT;
+
+const objPup = {
+  headless: true,
+  devtools: true,
+  args: [
+    '--disable-web-security',
+    '--disable-features=IsolateOrigins',
+    '--disable-site-isolation-trials',
+    '--no-sandbox',
+    '--disabled-setupid-sandbox',
+  ],
+};
+
+if (OSenvironment === 'linux') objPup.executablePath = '/usr/bin/chromium-browser';
+
 (async () => {
-  const browser = await pup.launch({ headless: false });
+  const browser = await pup.launch(objPup);
   const page = await browser.newPage();
 
   await page.goto(url);

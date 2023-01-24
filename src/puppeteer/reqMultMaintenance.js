@@ -11,15 +11,23 @@ const pupMultReqMaintenance = async (codReq) => {
     const username = process.env.USERNAMESIPAC;
     const password = process.env.PASSWORDSIPAC;
 
-    const browser = await pup.launch({
+    const OSenvironment = process.env.OS_ENVIRONMENT;
+
+    const objPup = {
       headless: true,
       devtools: true,
       args: [
         '--disable-web-security',
         '--disable-features=IsolateOrigins',
         '--disable-site-isolation-trials',
+        '--no-sandbox',
+        '--disabled-setupid-sandbox',
       ],
-    });
+    };
+
+    if (OSenvironment === 'linux') objPup.executablePath = '/usr/bin/chromium-browser';
+
+    const browser = await pup.launch(objPup);
 
     const page = await browser.newPage();
 
