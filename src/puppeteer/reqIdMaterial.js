@@ -10,8 +10,8 @@ const codigo = 304200006739;
 
 const searchParam = `form=form&form%3AbuscaCodigo=on&form%3AcodigoMaterial=${codigo}&form%3AbtBuscarMaterial=Buscar&form%3ApaginaAtual=0&javax.faces.ViewState=j_id10`; // ESPECIFICAR O NUMERO E ANO DA REQUISIÇÃO. (REQ MATERIAL)
 
-const username = 'mykael.mello';
-const password = 'Brutus89+';
+const username = process.env.USERNAMESIPAC;
+const password = process.env.PASSWORDSIPAC;
 
 const OSenvironment = process.env.OS_ENVIRONMENT;
 
