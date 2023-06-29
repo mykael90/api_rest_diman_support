@@ -1,6 +1,6 @@
-import pupReqMaterial from '../puppeteer/reqMaterial';
+import pupReqMaterial from "../puppeteer/reqMaterial";
 
-import pupMultReqMaterial from '../puppeteer/reqMultMaterial';
+import pupMultReqMaterial from "../puppeteer/reqMultMaterial";
 
 class ReqMaterialController {
   // GET
@@ -19,7 +19,10 @@ class ReqMaterialController {
 
   async store(req, res) {
     try {
-      const reqMat = await pupMultReqMaterial(req.body.requisicoes);
+      const reqMat = await pupMultReqMaterial(
+        req.body.requisicoes,
+        req.body.user
+      );
       // const reqMat = req.body.requisicoes;
       console.log(reqMat);
       return res.json(reqMat);
