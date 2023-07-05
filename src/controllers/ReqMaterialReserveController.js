@@ -19,7 +19,6 @@ class ReqMaterialController {
 
   async store(req, res) {
     try {
-      console.log('user', req.body.user);
       const reqMat = await pupMultReqMaterialReserve(
         req.body.requisicoes,
         req.body.user,
