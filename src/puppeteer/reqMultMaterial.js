@@ -189,6 +189,8 @@ const pupMultReqMaterial = async (codReq, user = null) => {
       idReqs,
     );
 
+    await page.close();
+
     await browser.close();
 
     const errors = Reqs.filter((req) => typeof req === 'string');
