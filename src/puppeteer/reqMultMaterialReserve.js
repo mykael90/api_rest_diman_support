@@ -15,7 +15,7 @@ const pupMultReqMaterial = async (codReq, user = null) => {
 
     const objPup = {
       headless: true,
-      devtools: true,
+      devtools: false,
       args: [
         '--disable-web-security',
         '--disable-features=IsolateOrigins',
