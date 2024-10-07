@@ -1,0 +1,12 @@
+services:
+
+  api_rest_diman_support:
+    build: .
+    container_name: rest_diman_support
+    ports:
+      - 3010:3010
+    env_file:
+      - .env
+    volumes:
+      - .:/home/node/api_rest_diman_support:cached
+    restart: always

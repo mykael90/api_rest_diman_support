@@ -30,7 +30,7 @@ const pupReqMaterial = async (codReq) => {
       ],
     };
 
-    if (OSenvironment === 'linux') objPup.executablePath = '/usr/bin/chromium-browser';
+    if (OSenvironment === 'linux') objPup.executablePath = '/usr/bin/chromium';
 
     const browser = await pup.launch(objPup);
 
@@ -47,7 +47,7 @@ const pupReqMaterial = async (codReq) => {
     await Promise.all(
       [
         page.waitForNavigation(),
-        await page.click('.btn-login'),
+        await page.click('.btn-primary'),
 
       ],
 

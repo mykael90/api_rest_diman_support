@@ -44,7 +44,7 @@ const pupMultReqMaterial = async (codReq) => {
   await Promise.all(
     [
       page.waitForNavigation(),
-      await page.click('.btn-login'),
+      await page.click('.btn-primary'),
 
     ],
 

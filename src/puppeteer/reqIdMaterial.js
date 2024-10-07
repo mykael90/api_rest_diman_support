@@ -27,7 +27,7 @@ const objPup = {
   ],
 };
 
-if (OSenvironment === 'linux') objPup.executablePath = '/usr/bin/chromium-browser';
+if (OSenvironment === 'linux') objPup.executablePath = '/usr/bin/chromium';
 
 (async () => {
   const browser = await pup.launch(objPup);
@@ -44,7 +44,7 @@ if (OSenvironment === 'linux') objPup.executablePath = '/usr/bin/chromium-browse
   await Promise.all(
     [
       page.waitForNavigation(),
-      await page.click('.btn-login'),
+      await page.click('.btn-primary'),
 
     ],
 

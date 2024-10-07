@@ -26,7 +26,7 @@ const pupMultReqMaterial = async (codReq, user = null) => {
     };
 
     if (OSenvironment === 'linux') {
-      objPup.executablePath = '/usr/bin/chromium-browser';
+      objPup.executablePath = '/usr/bin/chromium';
     }
 
     const browser = await pup.launch(objPup);
@@ -46,7 +46,7 @@ const pupMultReqMaterial = async (codReq, user = null) => {
     await page.waitForSelector('#password');
     await page.type('#password', password);
 
-    await Promise.all([page.waitForNavigation(), page.click('.btn-login')]);
+    await Promise.all([page.waitForNavigation(), page.click('.btn-primary')]);
 
     await page.waitForSelector('#info-sistema > span');
 
