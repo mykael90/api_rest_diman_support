@@ -41,7 +41,7 @@ wget \
 xdg-utils \
 chromium
 
-USER node
+# USER node
 
 RUN mkdir /home/node/api_rest_diman_support/
 
